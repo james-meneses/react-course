@@ -26,8 +26,15 @@ function App() {
 ]
 )
 
+  // remover tarefa
   const onDelete = (id) => {
     setTarefas(tarefas.filter((tarefa) => tarefa.id !== id))
+  }
+
+  // ativar/desativar lembrete
+  const onToggle = (id) => {
+    console.log('lembrete ', id)
+    setTarefas( tarefas.map((tarefa) => tarefa.id === id ? { ...tarefa, lembrete: !tarefa.lembrete } : tarefa ))
   }
 
   return (
@@ -35,7 +42,8 @@ function App() {
       <Header  />
       { tarefas.length > 0 ? 
         (
-        <Tasks tarefas={tarefas} onDelete={onDelete} />
+        <Tasks tarefas={tarefas} onDelete={onDelete}
+                                 onToggle={onToggle} />
         ) : (<p>Nenhuma tarefa disponível.</p>)
       }
       </div>
