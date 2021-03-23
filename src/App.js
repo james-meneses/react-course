@@ -1,33 +1,47 @@
 import React from 'react'
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import Header from './components/Header'
 import Tasks from './components/Tasks'
+import AddTask from './components/AddTask'
 
 function App() {
-  const [tarefas, setTarefas] = useState([
-    {
-        id: 1, 
-        titulo: 'Correr 5km',
-        data: '24 de Março às 06h',
-        lembrete: true
-    },
-    {
-        id: 2, 
-        titulo: 'Meditar',
-        data: '24 de Março às 08h',
-        lembrete: true
-    },
-    {
-        id: 3, 
-        titulo: 'Ler',
-        data: '24 de Março às 22h',
-        lembrete: true
+  const [tarefas, setTarefas] = useState([])
+
+  const [showAddTask, setShowAddTask] = useState(false)
+
+  useEffect (() => {
+    const getTasks = async () => {
+      const tarefasDoBanco = await fetchTasks()
+      setTarefas(tarefasDoBanco)
     }
-]
-)
+
+    getTasks()
+  }, [])
+
+  // buscar tarefas no banco
+  const fetchTasks = async () => {
+    const res = await fetch('http://localhost:5000/tasks')
+    const data = await res.json()
+
+    return data
+  }
+
+  // buscar uma tarefa específica
+  const fetchTask = async (id) => {
+    const res = await fetch(`http://localhost:5000/tasks/${id}`)
+    const data = await res.json()
+
+    return data
+  }
+
+
 
   // remover tarefa
-  const onDelete = (id) => {
+  const onDelete = async (id) => {
+    await fetch(`http://localhost:5000/tasks/${id}`, 
+                {'method': 'DELETE'})
+
+    console.log('removendo a tarefa ', tarefas[id-1])
     setTarefas(tarefas.filter((tarefa) => tarefa.id !== id))
   }
 
@@ -37,9 +51,37 @@ function App() {
     setTarefas( tarefas.map((tarefa) => tarefa.id === id ? { ...tarefa, lembrete: !tarefa.lembrete } : tarefa ))
   }
 
+  // adicionar tarefa
+  const addTask = async (tarefa) => {
+    console.log('tarefa', tarefa)
+    console.log('tarefa Json', JSON.stringify(tarefa))
+
+
+    const res = await fetch('http://localhost:5000/tasks', {
+                            method: 'POST', 
+                            headers: { 
+                              'Content-type' : 'application/json'
+                            },
+                            body: JSON.stringify(tarefa)
+                          })
+    
+    const data = await res.json()
+    console.log('dado=>', data)
+    setTarefas([...tarefas, data])
+    // const id = Math.floor(Math.random() * 10000) + 1
+    
+    // const novaTarefa = {id, ...tarefa}
+
+    // console.log('tarefa', tarefa, id)
+
+    // setTarefas([...tarefas, novaTarefa])
+  }
+
   return (
     <div className="container">
-      <Header  />
+      <Header onAdd={() => setShowAddTask(!showAddTask)}
+              showAdd = {showAddTask} />
+      {showAddTask && <AddTask onAdd={addTask}/>}
       { tarefas.length > 0 ? 
         (
         <Tasks tarefas={tarefas} onDelete={onDelete}
