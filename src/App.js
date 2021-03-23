@@ -34,7 +34,25 @@ function App() {
     return data
   }
 
+  // Atualização do Lembrete no BD
+  const toggleReminder = async (id) => {
+    const tarefaAlvo = await fetchTask(id)
+    const updTarefa = {...tarefaAlvo, lembrete: !tarefaAlvo.lembrete}
 
+    const res = await fetch (`http://localhost:5000/tasks/${id}`,{
+                  method: 'PUT',
+                  headers: { 'Content-type': 'application/json'},
+                  body: JSON.stringify(updTarefa)
+    })
+
+    const dados = await res.json()
+    setTarefas( 
+      tarefas.map((tarefa) => 
+        tarefa.id === id ? 
+        { ...tarefa, lembrete: dados.lembrete } : tarefa 
+        )
+      )
+  }
 
   // remover tarefa
   const onDelete = async (id) => {
@@ -53,10 +71,7 @@ function App() {
 
   // adicionar tarefa
   const addTask = async (tarefa) => {
-    console.log('tarefa', tarefa)
-    console.log('tarefa Json', JSON.stringify(tarefa))
-
-
+  
     const res = await fetch('http://localhost:5000/tasks', {
                             method: 'POST', 
                             headers: { 
@@ -85,7 +100,7 @@ function App() {
       { tarefas.length > 0 ? 
         (
         <Tasks tarefas={tarefas} onDelete={onDelete}
-                                 onToggle={onToggle} />
+                                 onToggle={toggleReminder} />
         ) : (<p>Nenhuma tarefa disponível.</p>)
       }
       </div>

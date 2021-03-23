@@ -9,8 +9,14 @@
     {
       "titulo": "Estudar Javascript",
       "data": "23 de Março às 19h",
-      "lembrete": true,
+      "lembrete": false,
       "id": 2
+    },
+    {
+      "titulo": "Limpar a casa",
+      "data": "24 de Janeiro às 22h",
+      "lembrete": false,
+      "id": 3
     }
   ]
 }
