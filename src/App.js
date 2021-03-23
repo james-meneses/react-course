@@ -26,11 +26,19 @@ function App() {
 ]
 )
 
+  const onDelete = (id) => {
+    setTarefas(tarefas.filter((tarefa) => tarefa.id !== id))
+  }
+
   return (
     <div className="container">
       <Header  />
-      <Tasks tarefas={tarefas} />
-    </div>
+      { tarefas.length > 0 ? 
+        (
+        <Tasks tarefas={tarefas} onDelete={onDelete} />
+        ) : (<p>Nenhuma tarefa disponível.</p>)
+      }
+      </div>
   );
 }
 
