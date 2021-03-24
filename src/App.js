@@ -1,8 +1,11 @@
 import React from 'react'
 import {useState, useEffect} from 'react'
+import {BrowserRouter as Router, Route} from 'react-router-dom'
 import Header from './components/Header'
 import Tasks from './components/Tasks'
 import AddTask from './components/AddTask'
+import Footer from './components/Footer'
+import Sobre from './components/Sobre'
 
 function App() {
   const [tarefas, setTarefas] = useState([])
@@ -64,10 +67,10 @@ function App() {
   }
 
   // ativar/desativar lembrete
-  const onToggle = (id) => {
-    console.log('lembrete ', id)
-    setTarefas( tarefas.map((tarefa) => tarefa.id === id ? { ...tarefa, lembrete: !tarefa.lembrete } : tarefa ))
-  }
+  // const onToggle = (id) => {
+  //   console.log('lembrete ', id)
+  //   setTarefas( tarefas.map((tarefa) => tarefa.id === id ? { ...tarefa, lembrete: !tarefa.lembrete } : tarefa ))
+  // }
 
   // adicionar tarefa
   const addTask = async (tarefa) => {
@@ -84,27 +87,36 @@ function App() {
     console.log('dado=>', data)
     setTarefas([...tarefas, data])
     // const id = Math.floor(Math.random() * 10000) + 1
-    
     // const novaTarefa = {id, ...tarefa}
-
     // console.log('tarefa', tarefa, id)
-
     // setTarefas([...tarefas, novaTarefa])
   }
 
   return (
-    <div className="container">
-      <Header onAdd={() => setShowAddTask(!showAddTask)}
-              showAdd = {showAddTask} />
-      {showAddTask && <AddTask onAdd={addTask}/>}
-      { tarefas.length > 0 ? 
-        (
-        <Tasks tarefas={tarefas} onDelete={onDelete}
-                                 onToggle={toggleReminder} />
-        ) : (<p>Nenhuma tarefa disponível.</p>)
-      }
+    <Router>
+      <div className="container">
+        <Header onAdd={() => setShowAddTask(!showAddTask)}
+                showAdd = {showAddTask} />
+        
+
+        <Route path="/" exact render={(props) => (
+          <>
+          {showAddTask && <AddTask onAdd={addTask}/>}
+            { tarefas.length > 0 ? 
+              (
+              <Tasks tarefas={tarefas} onDelete={onDelete}
+                                      onToggle={toggleReminder} />
+              ) : (<p>Nenhuma tarefa disponível.</p>)
+            }
+            </>
+        )} />
+
+        <Route path="/sobre" component={Sobre} />
+        <Footer />
       </div>
+    </Router>
   );
+
 }
 
 export default App;

@@ -13,7 +13,7 @@ const Header = ({title, onAdd, showAdd}) => {
 }
 
 Header.defaultProps = {
-    title: "Criativa Digital"
+    title: "Tarefas"
 }
 
 Header.propTypes = {

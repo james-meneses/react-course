@@ -8,6 +8,8 @@
 
 body {
   font-family: 'Poppins', sans-serif;
+  background: rgb(162,10,195);
+  background: linear-gradient(31deg, rgba(162,10,195,1) 0%, rgba(145,0,255,1) 100%);
 }
 
 .container {
@@ -15,9 +17,9 @@ body {
   margin: 30px auto;
   overflow: auto;
   min-height: 300px;
-  border: 1px solid steelblue;
-  padding: 30px;
   border-radius: 5px;
+  padding: 30px;
+  background: #fff
 }
 
 .header {
@@ -91,19 +93,16 @@ body {
   font-size: 17px;
 }
 
-.form-control-check {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.form-control-check label,
+.form-control-check input {
+  display: inline-block;
+  vertical-align: middle;
 }
 
-.form-control-check label {
-  flex: 1;
-}
 
 .form-control-check input {
-  flex: 2;
   height: 20px;
+  width: 20px
 }
 
 footer {
